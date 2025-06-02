@@ -26,12 +26,16 @@ class BlogData {
   final String description;
   final String bannerImage;
   final String postDate;
+  final String bannerVideo;
+  final String bannerType;
 
   BlogData({
     required this.title,
     required this.description,
     required this.bannerImage,
     required this.postDate,
+    required this.bannerType,
+    required this.bannerVideo,
   });
 
   factory BlogData.fromJson(Map<String, dynamic> json) {
@@ -40,6 +44,8 @@ class BlogData {
       description: json['description'] ?? '',
       bannerImage: json['bannerImage'] ?? '',
       postDate: json['postDate'] ?? '',
+      bannerVideo: json['bannerVideo'] ?? '',
+      bannerType: json['bannerType'] ?? '',
     );
   }
 }

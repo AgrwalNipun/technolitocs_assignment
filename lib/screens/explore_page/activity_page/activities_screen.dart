@@ -12,6 +12,8 @@ class ActivityScreen extends StatefulWidget {
   State<ActivityScreen> createState() => _ActivityScreenState();
 }
 
+
+
 class _ActivityScreenState extends State<ActivityScreen> {
   List<NewsBlogEventResponses> _events = [];
   bool _loading = true;
@@ -22,6 +24,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
     super.initState();
     _fetchEventData();
   }
+
+
+
+String removeAllHtmlTags(String htmlText) {
+  RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
+  return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+}
+
 
   Future<void> _fetchEventData() async {
     const String apiUrl =
@@ -159,9 +169,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     return GestureDetector(
                       onTap: () {
                         final blogData = BlogData(
+                          bannerVideo: event.bannerVideo,
+                          bannerType:event.bannerType,
                           title: event.title,
                           bannerImage: imageUrl,
                           postDate: dateStr,
+                          description: removeAllHtmlTags(event.description),
                         );
                         Navigator.push(
                           context,

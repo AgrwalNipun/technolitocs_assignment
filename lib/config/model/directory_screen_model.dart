@@ -18,6 +18,7 @@ class DirectoryProfile {
     this.rbNationalDesignationId,
     this.rbChapterDesignationId,
     this.cityId,
+    required this.isPioneerMember,
   });
 
   factory DirectoryProfile.fromJson(Map<String, dynamic> json) {
@@ -27,7 +28,7 @@ class DirectoryProfile {
       defaultStatus: json['defaultStatus'] ?? '',
       rbNationalDesignationId: json['rbNationalDesignationId'],
       rbChapterDesignationId: json['rbChapterDesignationId'],
-      cityId: json['cityId'],
+      cityId: json['cityId'], isPioneerMember: false,
     );
   }
 
