@@ -2,10 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../config/model/blog_details_model.dart';
 
-class BlogDetails extends StatelessWidget {
+
+class BlogDetails extends StatefulWidget {
   final BlogData blogData;
 
   const BlogDetails({Key? key, required this.blogData}) : super(key: key);
+
+  @override
+  State<BlogDetails> createState() => _BlogDetailsState();
+}
+
+class _BlogDetailsState extends State<BlogDetails> {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +42,29 @@ class BlogDetails extends StatelessWidget {
       color: Colors.grey,
     );
 
+
+late var _controller;
+
+@override
+void initState() {
+  super.initState();
+  
+  _controller = YoutubePlayerController(
+  params: YoutubePlayerParams(
+    mute: false,
+    showControls: true,
+    showFullscreenButton: true,
+  ),
+);
+}
+
+
+    Widget videoPlayer(String uri){
+
+    
+
+    }
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
@@ -54,43 +86,11 @@ class BlogDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.network(
-                blogData.bannerImage,
-
-
-
-
-
-
-
-                width: double.infinity,
+              widget.blogData.bannerType=="IMAGE"? Image.network(
+                widget.blogData.bannerImage,
+width: double.infinity,
                 height: screenWidth * 0.6,
-
-
-
-
-
-
-
-
                 fit: BoxFit.cover,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                 errorBuilder:
                     (context, error, stackTrace) => Container(
@@ -98,13 +98,15 @@ class BlogDetails extends StatelessWidget {
                       color: Colors.grey.shade300,
                       child: const Icon(Icons.broken_image, size: 40),
                     ),
-              ),
+              )
+              :videoPlayer(widget.blogData.bannerVideo),
+              
               SizedBox(height: padding),
-              Text(blogData.postDate, style: dateStyle),
+              Text(widget.blogData.postDate, style: dateStyle),
               SizedBox(height: padding * 0.5),
-              Text(blogData.title, style: titleStyle),
+              Text(widget.blogData.title, style: titleStyle),
               SizedBox(height: padding),
-              Text(blogData.description, style: descriptionStyle),
+              Text(widget.blogData.description, style: descriptionStyle),
             ],
           ),
         ),
