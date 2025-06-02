@@ -27,20 +27,20 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
       'highlight': 'Best of Life.',
     },
     {
-      'normal': '',
-      'highlight': 'Social\n',
+      'normal': '\n',
+      'highlight': 'Social',
     },
     {
-      'normal': '',
-      'highlight': 'Learning\n',
+      'normal': '\n',
+      'highlight': 'Learning',
     },
     {
-      'normal': '',
-      'highlight': 'Lifestyle\n',
+      'normal': '\n',
+      'highlight': 'Lifestyle',
     },
     {
-      'normal': '',
-      'highlight': 'Connect\n',
+      'normal': '\n',
+      'highlight': 'Connect',
     },
   ];
 
@@ -109,19 +109,18 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/bg.png',
-            fit: BoxFit.cover,
-          ),
+          Image.asset('assets/images/bg.png', fit: BoxFit.cover),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06), // Around 24px on 400px screen
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.06,
+              ), // Around 24px on 400px screen
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 38,),
+                  SizedBox(height: 18,),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(300), // Responsive radius
+                    borderRadius: BorderRadius.circular(screenWidth * 0.75), // Responsive radius
                     child: SizedBox(
                       width: screenWidth * 0.64,
                       height: screenHeight * 0.52,
@@ -174,14 +173,14 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(
                       imageAssets.length,
-                          (index) => _buildIndicator(index),
+                      (index) => _buildIndicator(index),
                     ),
                   ),
 
                   const SizedBox(height: 34),
 
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20 , bottom: 32),
+                    padding: const EdgeInsets.only(left: 20, right: 20 , top: 20),
                     child: Column(
                       children: [
                         const Text(
@@ -189,7 +188,7 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                           style: TextStyle(
                             fontSize: 15,
                             color: Color(0xffBABABA),
-                            fontWeight: FontWeight.w500
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -199,7 +198,7 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-                        
+
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: UI_COLORS.uiWhiteColor,
@@ -213,7 +212,13 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                               //   fontSize: 16,
                               // ),
                             ),
-                            child: const Text('Continue as Guest' , style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                            child: const Text(
+                              'Continue as Guest',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 15),
@@ -222,7 +227,12 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                           height: 54,
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginScreen(),
+                                ),
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff252424),
@@ -236,7 +246,13 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                               //   fontSize: 16,
                               // ),
                             ),
-                            child: const Text('Already a Member ? Login', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
+                            child: const Text(
+                              'Already a Member ? Login',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         ),
                       ],

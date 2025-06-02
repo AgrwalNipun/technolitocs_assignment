@@ -146,7 +146,6 @@ class _DirectoryState extends State<Directory> {
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: EdgeInsets.symmetric(vertical: 18,horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
@@ -209,7 +208,7 @@ class _DirectoryState extends State<Directory> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                if (member.isPioneerMember)
+                if (member.defaultStatus.toLowerCase() == "pioneer")
                   _pioneerTag(),
                 // Add special tags for Fanish Jain and Anup Mundhra
                 // if (member.name.toLowerCase().contains('fanish jain') ||

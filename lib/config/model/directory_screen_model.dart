@@ -18,12 +18,9 @@ class DirectoryProfile {
     this.rbNationalDesignationId,
     this.rbChapterDesignationId,
     this.cityId,
-    required this.isPioneerMember
   });
 
   factory DirectoryProfile.fromJson(Map<String, dynamic> json) {
-bool x =json['membershipType'].contains("PIONEER_PATRON_MEMBER");
-
     return DirectoryProfile(
       name: json['name'] ?? '',
       profilePicture: json['profilePicture'] ?? '',
@@ -31,7 +28,6 @@ bool x =json['membershipType'].contains("PIONEER_PATRON_MEMBER");
       rbNationalDesignationId: json['rbNationalDesignationId'],
       rbChapterDesignationId: json['rbChapterDesignationId'],
       cityId: json['cityId'],
-      isPioneerMember:x,
     );
   }
 

@@ -118,7 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: UI_COLORS.uiBgColor,
       resizeToAvoidBottomInset: true,
-      
       appBar: AppBar(
         backgroundColor: UI_COLORS.uiBgColor,
         elevation: 0,

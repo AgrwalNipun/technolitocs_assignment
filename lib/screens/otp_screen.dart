@@ -1,6 +1,8 @@
 import 'dart:async';
 
+// import 'package:assihnment_technolitocs/config/model/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -276,14 +278,13 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
-                            width: 160,
-                            child: CustomButton(
-                              onPressed:
-                                  !_isLoading ? _handleOtpVerification : null,
-                              text: _isLoading ? "Verifying..." : "Verify OTP",
-                              Function: () {},
-                            ),
-                          
+                          width: 160,
+                          child: CustomButton(
+                            onPressed:
+                                !_isLoading ? _handleOtpVerification : null,
+                            text: _isLoading ? "Verifying..." : "Verify OTP",
+                            Function: () {},
+                          ),
                         ),
                       ],
                     ),
