@@ -86,7 +86,7 @@ class _OtpScreenState extends State<OtpScreen> {
     }
   }
 
-  Future<void> _handleOtpVerification() async {
+  Future<void > _handleOtpVerification() async {
     String otp = _controller.text.trim();
     if (otp.length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,11 +106,10 @@ class _OtpScreenState extends State<OtpScreen> {
           "otp": otp,
         }),
       );
-
+      
       final data = jsonDecode(response.body);
       if (response.statusCode == 200 && data["accessToken"] != null) {
         await _saveLoginCredentials(data["accessToken"]);
-
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const HomeScreen()),
@@ -277,13 +276,14 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                         const SizedBox(height: 20),
                         SizedBox(
-                          width: 160,
-                          child: CustomButton(
-                            onPressed:
-                                !_isLoading ? _handleOtpVerification : null,
-                            text: _isLoading ? "Verifying..." : "Verify OTP",
-                            Function: () {},
-                          ),
+                            width: 160,
+                            child: CustomButton(
+                              onPressed:
+                                  !_isLoading ? _handleOtpVerification : null,
+                              text: _isLoading ? "Verifying..." : "Verify OTP",
+                              Function: () {},
+                            ),
+                          
                         ),
                       ],
                     ),

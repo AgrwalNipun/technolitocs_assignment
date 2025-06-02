@@ -54,20 +54,50 @@ class BlogDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  blogData.bannerImage,
-                  width: double.infinity,
-                  height: screenWidth * 0.6,
-                  fit: BoxFit.cover,
-                  errorBuilder:
-                      (context, error, stackTrace) => Container(
-                        height: screenWidth * 0.6,
-                        color: Colors.grey.shade300,
-                        child: const Icon(Icons.broken_image, size: 40),
-                      ),
-                ),
+              Image.network(
+                blogData.bannerImage,
+
+
+
+
+
+
+
+                width: double.infinity,
+                height: screenWidth * 0.6,
+
+
+
+
+
+
+
+
+                fit: BoxFit.cover,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                errorBuilder:
+                    (context, error, stackTrace) => Container(
+                      height: screenWidth * 0.6,
+                      color: Colors.grey.shade300,
+                      child: const Icon(Icons.broken_image, size: 40),
+                    ),
               ),
               SizedBox(height: padding),
               Text(blogData.postDate, style: dateStyle),
