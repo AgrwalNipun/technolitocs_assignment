@@ -3,6 +3,7 @@ import 'package:assihnment_technolitocs/Screens/login_screen.dart';
 import 'package:assihnment_technolitocs/utils/ui_colors.dart';
 import 'package:assihnment_technolitocs/utils/ui_custom_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class WalthroughScreen extends StatefulWidget {
   const WalthroughScreen({Key? key}) : super(key: key);
@@ -26,20 +27,20 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
       'highlight': 'Best of Life.',
     },
     {
-      'normal': '\n',
-      'highlight': 'Social',
+      'normal': '',
+      'highlight': 'Social\n',
     },
     {
-      'normal': '\n',
-      'highlight': 'Learning',
+      'normal': '',
+      'highlight': 'Learning\n',
     },
     {
-      'normal': '\n',
-      'highlight': 'Lifestyle',
+      'normal': '',
+      'highlight': 'Lifestyle\n',
     },
     {
-      'normal': '\n',
-      'highlight': 'Connect',
+      'normal': '',
+      'highlight': 'Connect\n',
     },
   ];
 
@@ -95,6 +96,16 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
 
     return Scaffold(
       backgroundColor: UI_COLORS.uiBgColor,
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.light,
+
+              statusBarBrightness: Brightness.dark,
+            ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -108,9 +119,9 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 18,),
+                  SizedBox(height: 38,),
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(screenWidth * 0.75), // Responsive radius
+                    borderRadius: BorderRadius.circular(300), // Responsive radius
                     child: SizedBox(
                       width: screenWidth * 0.64,
                       height: screenHeight * 0.52,
@@ -144,11 +155,12 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                         fontFamily: 'Movatif',
                       ),
                       children: [
-                        TextSpan(text: headingTexts[currentIndex]['normal']),
+                        TextSpan(text: headingTexts[currentIndex]['normal']== headingTexts[currentIndex]['highlight']?null:headingTexts[currentIndex]['normal']),
                         WidgetSpan(
                           child: GradientText(
                             text: headingTexts[currentIndex]['highlight']!,
                             fontSize: 32,
+                            
                           ),
                         ),
                       ],
@@ -166,10 +178,10 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 34),
 
                   Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20 , top: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20 , bottom: 32),
                     child: Column(
                       children: [
                         const Text(
@@ -180,32 +192,34 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                             fontWeight: FontWeight.w500
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 15),
                         SizedBox(
                           width: double.infinity,
+                          height: 54,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-
+                        
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: UI_COLORS.uiWhiteColor,
                               foregroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 17),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(35),
                               ),
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
+                              // textStyle: const TextStyle(
+                              //   fontWeight: FontWeight.w700,
+                              //   fontSize: 16,
+                              // ),
                             ),
                             child: const Text('Continue as Guest' , style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 15),
                         SizedBox(
                           width: double.infinity,
+                          height: 54,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -213,14 +227,14 @@ class _WalthroughScreenState extends State<WalthroughScreen> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff252424),
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              padding: const EdgeInsets.symmetric(vertical: 17,horizontal: 10),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(35),
                               ),
-                              textStyle: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12,
-                              ),
+                              // textStyle: const TextStyle(
+                              //   fontWeight: FontWeight.w700,
+                              //   fontSize: 16,
+                              // ),
                             ),
                             child: const Text('Already a Member ? Login', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
                           ),
