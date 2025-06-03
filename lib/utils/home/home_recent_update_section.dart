@@ -1,10 +1,21 @@
+import 'dart:convert';
+
 import 'package:assihnment_technolitocs/utils/ui_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'home_recent_update_card.dart';
 
 class RecentUpdatesSection extends StatelessWidget {
   const RecentUpdatesSection({Key? key}) : super(key: key);
+  Future<Map<dynamic,dynamic>> getRecentUpdates() async{
+
+    final url = "https://api-iiacgv2.technolitics.com/api/v1/home/homeTimeline";
+    final res = await http.get(Uri.parse(url));
+    final data = jsonDecode(res.body);
+    return data;
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,45 +61,81 @@ class RecentUpdatesSection extends StatelessWidget {
 
           // Update cards with reduced vertical spacing
           const SizedBox(height: 12), // Reduced from 18 to 12
-          const UpdateCardWidget(
-            title:
-                'Join our Community Donation Drive 2025 to help those in need!',
-            tagText: 'Food Donation',
-            date: 'April 8, 2025',
-            imagePath: 'assets/images/ru1.jpg',
-            bottomText:
-                'Be a part of our Community Donation Drive 2025! Together, we can make a difference in t...',
-          ),
-          const SizedBox(height: 8), // Reduced spacing between cards
-          const UpdateCardWidget(
-            title:
-                'National Confrence 2025 : National Association Realtors India',
-            tagText: 'Conference',
-            date: 'April 6, 2025',
-            imagePath: 'assets/images/ru2.jpg',
-            bottomText:
-                'The National Conference 2022, hosted by the National Association of Realtors India, brough...',
-          ),
-          const SizedBox(height: 8), // Reduced spacing between cards
-          const UpdateCardWidget(
-            title:
-                'Celebrating Unity: Yoga Day 2022 - A Journey Towards Wellness and Harmony for All',
-            tagText: 'Yoga Day',
-            date: 'April 8, 2025',
-            imagePath: 'assets/images/ru3.jpg',
-            bottomText:
-                'We invite you to participate in our Community Donation Drive 2023, a heartfelt initiative aime...',
-          ),
-          const SizedBox(height: 8), // Reduced spacing between cards
-          const UpdateCardWidget(
-            title:
-                'Building Connections: A Fun Team Adventure to Strengthen Bonds and Collaboration Together!',
-            tagText: 'Event',
-            date: 'April 8, 2025',
-            imagePath: 'assets/images/ru4.jpg',
-            bottomText:
-                'Embarking on a Journey of Connection: Join us for an exciting team adventure designed to de...',
-          ),
+          // const UpdateCardWidget(
+          //   title:
+          //       'Join our Community Donation Drive 2025 to help those in need!',
+          //   tagText: 'Food Donation',
+          //   date: 'April 8, 2025',
+          //   imagePath: 'assets/images/ru1.jpg',
+          //   bottomText:
+          //       'Be a part of our Community Donation Drive 2025! Together, we can make a difference in t...',
+          // ),
+          // const SizedBox(height: 8), // Reduced spacing between cards
+          // const UpdateCardWidget(
+          //   title:
+          //       'National Confrence 2025 : National Association Realtors India',
+          //   tagText: 'Conference',
+          //   date: 'April 6, 2025',
+          //   imagePath: 'assets/images/ru2.jpg',
+          //   bottomText:
+          //       'The National Conference 2022, hosted by the National Association of Realtors India, brough...',
+          // ),
+          // const SizedBox(height: 8), // Reduced spacing between cards
+          // const UpdateCardWidget(
+          //   title:
+          //       'Celebrating Unity: Yoga Day 2022 - A Journey Towards Wellness and Harmony for All',
+          //   tagText: 'Yoga Day',
+          //   date: 'April 8, 2025',
+          //   imagePath: 'assets/images/ru3.jpg',
+          //   bottomText:
+          //       'We invite you to participate in our Community Donation Drive 2023, a heartfelt initiative aime...',
+          // ),
+          // const SizedBox(height: 8), // Reduced spacing between cards
+          // const UpdateCardWidget(
+          //   title:
+          //       'Building Connections: A Fun Team Adventure to Strengthen Bonds and Collaboration Together!',
+          //   tagText: 'Event',
+          //   date: 'April 8, 2025',
+          //   imagePath: 'assets/images/ru4.jpg',
+          //   bottomText:
+          //       'Embarking on a Journey of Connection: Join us for an exciting team adventure designed to de...',
+          // ),
+
+          FutureBuilder(future: getRecentUpdates(),
+              builder:(context,snapshot){
+
+            final data  = snapshot.data!;
+
+            if(!snapshot.hasData){
+
+              return Text("Error!!");            }
+            else if(snapshot.connectionState==ConnectionState.waiting){
+              return CircularProgressIndicator();
+            }
+
+            else{
+              print(data[0]);
+              print("/////////////////////");
+              print(data);
+
+              print("/////////////////////");
+              return ListView.builder(
+                  itemCount: data.length,
+
+                  itemBuilder: (context,index) {
+                    final data1 = data[index];
+                    // return UpdateCardWidget(
+                    //
+                    //   title: data1['title'],
+                    //   tagText: data1['postCategory'],
+                    //   date: data1['createdAt'],
+                    //   imagePath: data1['bannerImage'],
+                    //   bottomText: data1['description']);
+
+                  });
+            }
+
+              })
         ],
       ),
     );
@@ -138,4 +185,6 @@ class _NavTabContainer extends StatelessWidget {
       ),
     );
   }
+
+
 }

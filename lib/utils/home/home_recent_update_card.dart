@@ -83,8 +83,8 @@ class UpdateCardWidget extends StatelessWidget {
               const SizedBox(height: 14),
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
-                  imagePath,
+                child: Image.network(
+                  'https://technolitics-s3-bucket.s3.ap-south-1.amazonaws.com/rolbol-s3-bucket/${imagePath}',
                   height: 360,
                   width: 360,
                   fit: BoxFit.cover,

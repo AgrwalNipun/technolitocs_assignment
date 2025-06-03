@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../config/model/blog_details_model.dart';
-
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class BlogDetails extends StatefulWidget {
   final BlogData blogData;
@@ -14,7 +14,56 @@ class BlogDetails extends StatefulWidget {
 
 class _BlogDetailsState extends State<BlogDetails> {
 
+late var _controller;
 
+@override
+void initState() {
+  super.initState();
+  _controller = YoutubePlayerController(
+params: YoutubePlayerParams(
+  mute: false,
+  showControls: true,
+  showFullscreenButton: true,
+
+),
+);
+}
+
+String? extractYouTubeVideoId(String url) {
+  final uri = Uri.tryParse(url);
+  if (uri == null) return null;
+
+  // Handles https://www.youtube.com/watch?v=VIDEOID
+  if (uri.queryParameters.containsKey('v')) {
+    return uri.queryParameters['v'];
+  }
+
+  // Handles youtu.be/VIDEOID or youtube.com/embed/VIDEOID
+  final regExp = RegExp(
+    r"(?:v=|\/)([0-9A-Za-z_-]{11}).*",
+    caseSensitive: false,
+    multiLine: false,
+  );
+
+  final match = regExp.firstMatch(url);
+  return match?.group(1);
+}
+Widget videoPlayer(String uri){
+final id =extractYouTubeVideoId(uri);
+
+  final _controller = YoutubePlayerController.fromVideoId(
+    videoId: id!,
+    autoPlay: false,
+    params: const YoutubePlayerParams(showFullscreenButton: true),
+  );
+
+  return YoutubePlayer(
+    controller: _controller,
+    aspectRatio: 16 / 9,
+  );
+
+
+}
 
   @override
   Widget build(BuildContext context) {
@@ -41,29 +90,6 @@ class _BlogDetailsState extends State<BlogDetails> {
       fontWeight: FontWeight.w500,
       color: Colors.grey,
     );
-
-
-late var _controller;
-
-@override
-void initState() {
-  super.initState();
-  
-  _controller = YoutubePlayerController(
-  params: YoutubePlayerParams(
-    mute: false,
-    showControls: true,
-    showFullscreenButton: true,
-  ),
-);
-}
-
-
-    Widget videoPlayer(String uri){
-
-    
-
-    }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
