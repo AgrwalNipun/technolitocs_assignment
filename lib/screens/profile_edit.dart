@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -113,14 +114,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final formalAddressController = TextEditingController();
 
   final String apiUrl = 'https://api.rolbol.org/api/v1/adminuser/memberDetails';
-
-  final String bearerToken =
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MmVmNmIyMWU4MWQyZjc2ZmI0Zjk5ZiIsImlhdCI6MTc0NzkwODM0MCwiZXhwIjoxNzc5NDQ0MzQwfQ.D0nGC0WB44d742SM23pwLN6rQ8u6alYofxcJst3uQPc';
-
+  final bearerToken = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MTc3MWRjZDg1MjZlZWFmZmVjNjQ5YyIsImlhdCI6MTcxMjkyNjgxNywiZXhwIjoxNzQ0NDYyODE3fQ.EjnArerpbaKDIA3qmU8tD7m-IH1V4gpFauApa_X0UNc";
   @override
   void initState() {
     super.initState();
     fetchProfileData();
+    // bearerToken = ref.
+
   }
 
   File? _selectedImage;

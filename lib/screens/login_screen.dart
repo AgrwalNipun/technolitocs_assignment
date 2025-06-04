@@ -266,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Positioned(
               left: -130,
               right: 0,
-              bottom: bottomInset > 0 ? bottomInset + -325 : 30,
+              bottom: 30,
               child: Center(
                 child: SizedBox(
                   width: 150,

@@ -6,9 +6,15 @@ import 'package:http/http.dart' as http;
 
 import 'home_recent_update_card.dart';
 
-class RecentUpdatesSection extends StatelessWidget {
+class RecentUpdatesSection extends StatefulWidget {
   const RecentUpdatesSection({Key? key}) : super(key: key);
-  Future<Map<dynamic,dynamic>> getRecentUpdates() async{
+
+  @override
+  State<RecentUpdatesSection> createState() => _RecentUpdatesSectionState();
+}
+
+class _RecentUpdatesSectionState extends State<RecentUpdatesSection> {
+  Future<Map<String,dynamic>> getRecentUpdates() async{
 
     final url = "https://api-iiacgv2.technolitics.com/api/v1/home/homeTimeline";
     final res = await http.get(Uri.parse(url));
@@ -17,11 +23,32 @@ class RecentUpdatesSection extends StatelessWidget {
 
   }
 
+  final Gradient textGradient = const LinearGradient(
+    // colors: [Color(0xFF30D6EF), Color(0xFF6A81EB), Color(0xFF794CEC)],
+    colors:[Color(0xff6D78EB),Color(0xff53D5E8),Color(0xff6A81EB),Color(0xff794CEC)],
+    stops: [0,0.16,0.655,1.00],
+
+    //background: linear-gradient(90deg, #6D78EB 0%, #53D5E8 16%, #6A81EB 65.5%, #794CEC 100%);
+  );
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
+    return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+  }
+
+  late var _future;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _future = getRecentUpdates();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: UI_COLORS.uiWhiteColor,
-      constraints: const BoxConstraints(maxWidth: 400),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -101,41 +128,75 @@ class RecentUpdatesSection extends StatelessWidget {
           //       'Embarking on a Journey of Connection: Join us for an exciting team adventure designed to de...',
           // ),
 
-          FutureBuilder(future: getRecentUpdates(),
+          FutureBuilder(
+              future: getRecentUpdates(),
               builder:(context,snapshot){
 
-            final data  = snapshot.data!;
 
-            if(!snapshot.hasData){
+                if(snapshot.connectionState==ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator());
+                }
+                else if(!snapshot.hasData){
 
-              return Text("Error!!");            }
-            else if(snapshot.connectionState==ConnectionState.waiting){
-              return CircularProgressIndicator();
-            }
+              return Text("Error!!");}
+
+
 
             else{
-              print(data[0]);
-              print("/////////////////////");
-              print(data);
+              final data =snapshot.data!;
 
-              print("/////////////////////");
               return ListView.builder(
-                  itemCount: data.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), // Prevent nested scrolling
+
+                  itemCount: data['data']['postData'].length,
 
                   itemBuilder: (context,index) {
-                    final data1 = data[index];
-                    // return UpdateCardWidget(
-                    //
-                    //   title: data1['title'],
-                    //   tagText: data1['postCategory'],
-                    //   date: data1['createdAt'],
-                    //   imagePath: data1['bannerImage'],
-                    //   bottomText: data1['description']);
+                    final data1 = data['data']['postData'][index];
+                    // return Text(data1.toString());
+                     return UpdateCardWidget(
+                      title: data1['title'],
+                      tagText: data1['postCategory'],
+                      date: data1['createdAt'],
+                     imagePath: data1['bannerImage'],
+                       bottomText: removeAllHtmlTags(data1['description']));
 
                   });
             }
 
-              })
+              }),
+
+           SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30 ,0,30,100),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Rest of Life,',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                    fontFamily: 'Movatif',
+                  ),
+                ),
+                Text(
+                  'Best of Life.',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Movatif',
+                    foreground:
+                    Paint()
+                      ..shader = textGradient.createShader(
+                        const Rect.fromLTWH(0, 0, 150, 30),
+                      ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -169,7 +230,7 @@ class _NavTabContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 41,
+      // height: 41,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
         color: isSelected ? const Color(0xffE8E8E8) : Colors.transparent,

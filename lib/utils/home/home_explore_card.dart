@@ -42,7 +42,7 @@ class ExploreCard extends StatelessWidget {
 
     return Container(
       height: 195,
-      width: 321.7,
+      width: MediaQuery.of(context).size.width*10/11,
       margin: const EdgeInsets.only(right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

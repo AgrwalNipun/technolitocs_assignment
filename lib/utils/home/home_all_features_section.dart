@@ -65,7 +65,7 @@ class AllFeatureSection extends StatelessWidget {
                     print('Events tapped');
                   },
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 _featureButton(
                   icon: Icons.auto_awesome_outlined,
                   label: 'Projects & CSR',
@@ -73,7 +73,7 @@ class AllFeatureSection extends StatelessWidget {
                     print('Projects & CSR tapped');
                   },
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 _featureButton(
                   icon: CupertinoIcons.mic,
                   label: 'Rolbol Talk',
@@ -81,7 +81,7 @@ class AllFeatureSection extends StatelessWidget {
                     print('Rolbol Talk tapped');
                   },
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
                 _featureButton(
                   icon: CupertinoIcons.circle_righthalf_fill,
                   label: 'Conclaves',
@@ -116,7 +116,7 @@ class AllFeatureSection extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(icon, size: 24, color: Colors.black),
-              const SizedBox(width: 8),
+              const SizedBox(width: 10),
               Text(
                 label,
                 style: const TextStyle(

@@ -153,9 +153,9 @@ class Data {
       chapter: List<String>.from(json['chapter']),
       centerandsubcenterIds: List<String>.from(json['centerandsubcenterIds']),
       authoritiesIds:
-          (json['authoritiesIds'] as List)
-              .map((e) => AuthoritiesId.fromJson(e))
-              .toList(),
+      (json['authoritiesIds'] as List)
+          .map((e) => AuthoritiesId.fromJson(e))
+          .toList(),
       aboutMember: json['aboutMember'],
       profilePicture: json['profilePicture'],
       platForm: json['platForm'],
@@ -163,9 +163,9 @@ class Data {
       deleteStatus: json['deleteStatus'],
       defaultStatus: json['defaultStatus'],
       userStatusTimeline:
-          (json['userStatusTimeline'] as List)
-              .map((e) => UserStatusTimeline.fromJson(e))
-              .toList(),
+      (json['userStatusTimeline'] as List)
+          .map((e) => UserStatusTimeline.fromJson(e))
+          .toList(),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       v: json['__v'],

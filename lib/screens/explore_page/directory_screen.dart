@@ -39,9 +39,9 @@ class _DirectoryState extends State<Directory> {
         child: Column(
           children: [
             _buildSearchBar(),
-            const SizedBox(height: 12),
+            const SizedBox(height:20),
             _buildFilterButtons(),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             FutureBuilder<List<DirectoryProfile>>(
               future: members,
               builder: (context, snapshot) {
@@ -61,11 +61,13 @@ class _DirectoryState extends State<Directory> {
     );
   }
 
+
+
   Widget _buildSearchBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
-        height: 48,
+        height: 56,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(70),
@@ -77,26 +79,28 @@ class _DirectoryState extends State<Directory> {
             ),
           ],
         ),
-        child: TextField(
-          decoration: InputDecoration(
-            hintText: 'Search by Names, City, or Business Types',
-            hintStyle: const TextStyle(fontSize: 14),
-            prefixIcon: const Icon(Icons.search, size: 24),
-            suffixIcon: Padding(
-              padding: const EdgeInsets.all(11.0),
-              child: Image.asset(
-                'assets/images/Funnel.png',
-                color: Colors.black,
-                width: 24,
-                height: 24,
+        child: Center(
+          child: TextField(
+            decoration: InputDecoration(
+              hintText: 'Search by Names, City, or Business Types',
+              hintStyle: const TextStyle(fontSize: 14),
+              prefixIcon: const Icon(Icons.search, size: 24),
+              suffixIcon: Padding(
+                padding: const EdgeInsets.all(11.0),
+                child: Image.asset(
+                  'assets/images/Funnel.png',
+                  color: Colors.black,
+                  width: 24,
+                  height: 24,
+                ),
               ),
-            ),
-            isDense: true,
-            filled: true,
-            fillColor: Colors.white,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(65),
-              borderSide: BorderSide.none,
+              isDense: true,
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(65),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
         ),
@@ -134,9 +138,9 @@ class _DirectoryState extends State<Directory> {
   }
 
   Widget _buildMemberCards(
-    BuildContext context,
-    List<DirectoryProfile> members,
-  ) {
+      BuildContext context,
+      List<DirectoryProfile> members,
+      ) {
     return ListView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -146,17 +150,10 @@ class _DirectoryState extends State<Directory> {
 
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: EdgeInsets.symmetric(vertical: 18, horizontal: 10),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            // border: Border.all(color: Colors.grey.shade300),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.2),
-            //     blurRadius: 6,
-            //     offset: const Offset(0, 2),
-            //   ),
-            // ],
+            borderRadius: BorderRadius.circular(12)
           ),
           child: ListTile(
             onTap: () {
@@ -208,8 +205,7 @@ class _DirectoryState extends State<Directory> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                if (member.defaultStatus.toLowerCase() == "pioneer")
-                  _pioneerTag(),
+                if (member.isPioneerMember) _pioneerTag(),
                 // Add special tags for Fanish Jain and Anup Mundhra
                 // if (member.name.toLowerCase().contains('fanish jain') ||
                 //     member.name.toLowerCase().contains('anup mundhra'))

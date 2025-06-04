@@ -88,6 +88,10 @@ class UpdateCardWidget extends StatelessWidget {
                   height: 360,
                   width: 360,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.broken_image, size: 50, color: Colors.grey);
+                  },
+
                 ),
               ),
               const SizedBox(height: 12),

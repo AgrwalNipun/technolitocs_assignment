@@ -15,7 +15,7 @@ class BlogDetails extends StatefulWidget {
 class _BlogDetailsState extends State<BlogDetails> {
 
 late var _controller;
-
+final String linkImg = "https://technolitics-s3-bucket.s3.ap-south-1.amazonaws.com/rolbol-s3-bucket/";
 @override
 void initState() {
   super.initState();
@@ -64,8 +64,12 @@ final id =extractYouTubeVideoId(uri);
 
 
 }
+String removeAllHtmlTags(String htmlText) {
+  RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
+  return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+}
 
-  @override
+@override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final double padding = screenWidth * 0.05;
@@ -108,35 +112,282 @@ final id =extractYouTubeVideoId(uri);
         ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          padding: EdgeInsets.all(padding),
+
+          // padding: EdgeInsets.all(padding),
+
           child: Column(
+
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               widget.blogData.bannerType=="IMAGE"? Image.network(
                 widget.blogData.bannerImage,
-width: double.infinity,
-                height: screenWidth * 0.6,
+                width: double.infinity,
+                // height: screenWidth * 0.6,
                 fit: BoxFit.cover,
 
                 errorBuilder:
                     (context, error, stackTrace) => Container(
-                      height: screenWidth * 0.6,
-                      color: Colors.grey.shade300,
-                      child: const Icon(Icons.broken_image, size: 40),
-                    ),
+                  height: screenWidth * 0.6,
+                  color: Colors.grey.shade300,
+                  child: const Icon(Icons.broken_image, size: 40),
+                ),
               )
-              :videoPlayer(widget.blogData.bannerVideo),
-              
-              SizedBox(height: padding),
-              Text(widget.blogData.postDate, style: dateStyle),
-              SizedBox(height: padding * 0.5),
-              Text(widget.blogData.title, style: titleStyle),
-              SizedBox(height: padding),
-              Text(widget.blogData.description, style: descriptionStyle),
+                  :videoPlayer(widget.blogData.bannerVideo),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  children: [
+
+                    SizedBox(height: padding),
+                    Text(widget.blogData.postDate, style: dateStyle),
+                    SizedBox(height: padding * 0.5),
+                    Text(widget.blogData.title, style: titleStyle),
+                    SizedBox(height: padding),
+                    Text(widget.blogData.description, style: descriptionStyle),
+                    SizedBox(height: 50,),
+                    ListView.builder(
+                      shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount:widget.blogData.moreDescription.length ,
+                        itemBuilder: (context,index) {
+                        final item = widget.blogData.moreDescription[index];
+                        // print(item.description.toString()+ "/////////////////////////////${index}");
+
+                        try{
+                          print(item.description);
+                        }catch(e){
+                          print("/////////////////////////// ${e}");
+                        }
+                          return Column(
+                            children: [
+                              if(item.singleImage!='')
+                              Image.network(
+                                  linkImg+item.singleImage
+                              ),
+
+
+                               Text(removeAllHtmlTags(item.description.toString())),
+
+                               SizedBox(height: 40,),
+
+                              if(item.multipleImages.length>0)
+                              _imageGrid(item.multipleImages) ,
+
+
+                              SizedBox(height: 50,),
+                              // Image.network(
+                              //     linkImg+item.multipleImages[index]
+                              // ),
+                              Text(index.toString()),
+                            ],
+                          );
+                        })
+                  ],
+
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+
+
+  }
+Widget _imageGrid(List<String> images){
+  int value = images.length;
+
+    switch (value) {
+      case 1:
+        return Container(
+            child:Image.network(
+          linkImg +images[0],
+              errorBuilder: (_,_,_)=>Text("Error"),
+
+        ));
+      case 2:
+        return Row(
+          children: [
+    Image.network(
+    linkImg +images[0],
+    errorBuilder: (_,_,_)=>Text("Error"),
+
+    ),
+            Image.network(
+              linkImg +images[1],
+              errorBuilder: (_,_,_)=>Text("Error"),
+
+            )
+          ],
+        );
+      case 3:
+        return SizedBox(
+          height: 400,
+          child: Row(
+            children: [
+              Column(
+                children: [Image.network(
+                  linkImg +images[0],
+                  errorBuilder: (_,_,_)=>Text("Error"),
+
+                ),
+                  Image.network(
+                    linkImg +images[2],
+                    errorBuilder: (_,_,_)=>Text("Error"),
+
+                  ),
+
+                ],
+              ),
+              Image.network(
+                linkImg +images[1],
+                errorBuilder: (_,_,_)=>Text("Error"),
+
+              )
+            ],
+          ),
+        );
+      default:
+
+        return SizedBox(
+          height: 400,
+          child: Row(
+            children: [
+              Column(
+                children: [
+    GestureDetector(
+    onTap: (){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SwipeImages(images:images,currentIndex:0)));
+    },
+    child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                    width:MediaQuery.of(context).size.width/2-25,
+                    height: 170,
+                    fit:BoxFit.fill,
+                    linkImg +images[0],
+                    errorBuilder: (_,_,_)=>Text("Error"),
+                    
+                                    ),
+                  ),),
+                  SizedBox(
+                    height: 20,
+                  ),
+
+                  GestureDetector(
+                  onTap: (){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SwipeImages(images:images,currentIndex:2)));
+    },
+    child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),child: Image.network(
+                    width:MediaQuery.of(context).size.width/2-25,
+                    height: 210,
+                    fit: BoxFit.fill,
+                    linkImg +images[2],
+                    errorBuilder: (_,_,_)=>Text("Error"),
+
+                  ),
+    ),),
+                ],
+              ),
+              SizedBox(width: 10,),
+
+    GestureDetector(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SwipeImages(images:images,currentIndex:1)));
+      },
+      child: ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+          child:Image.network(
+                  width:MediaQuery.of(context).size.width/2-25,
+                  height: 400,
+                  fit: BoxFit.cover,
+                  linkImg +images[1],
+                  errorBuilder: (_,_,_)=>Text("Error"),
+      
+                )),
+    )
+            ],
+          ),
+        );
+    }
+
+
+}
+}
+
+
+class SwipeImages extends StatefulWidget {
+  final List<String> images;
+  int currentIndex;
+  SwipeImages({super.key,
+    required this.images,
+    required this.currentIndex
+  });
+
+  @override
+  State<SwipeImages> createState() => _SwipeImagesState();
+}
+
+class _SwipeImagesState extends State<SwipeImages> {
+  late int index;
+  late List<String> images;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    index = widget.currentIndex;
+    images = widget.images;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    int x = index;
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle:  SystemUiOverlayStyle(
+          statusBarColor: Colors.black, // set this to match AppBar or transparent
+          statusBarIconBrightness: Brightness.light, // <-- this makes icons white (Android)
+          statusBarBrightness: Brightness.dark,       // <-- this is for iOS
+        ),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        
+      ),
+      backgroundColor: Colors.black,
+      body:PageView.builder(
+          itemCount: images.length,
+          controller: PageController(initialPage: index),
+
+          itemBuilder: (context,index1) {
+
+            return Center(
+        child: InteractiveViewer(
+          onInteractionEnd: (val){
+            setState(() {
+              x= index1;
+            });
+          }
+          ,
+          minScale: 0.5,
+          panEnabled: true,
+          child: Image.network(
+            height: double.infinity,
+            width: double.infinity,
+            "https://technolitics-s3-bucket.s3.ap-south-1.amazonaws.com/rolbol-s3-bucket/"+images[index1],
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+      );
+          }
+      )
+    );
   }
 }
+
+

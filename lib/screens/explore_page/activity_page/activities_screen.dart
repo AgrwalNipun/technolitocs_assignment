@@ -2,6 +2,7 @@ import 'package:assihnment_technolitocs/config/model/news_blog_event_model.dart'
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../../../config/model/blog_details_model.dart';
 import 'blog_details.dart';
 
@@ -18,13 +19,64 @@ class _ActivityScreenState extends State<ActivityScreen> {
   List<NewsBlogEventResponses> _events = [];
   bool _loading = true;
   bool _apiWorking = true;
-
+  late var _controller;
+  
+  
   @override
   void initState() {
     super.initState();
     _fetchEventData();
+
+    _controller = YoutubePlayerController(
+      params: YoutubePlayerParams(
+        mute: false,
+        showControls: true,
+        showFullscreenButton: true,
+
+      ),
+    );
+
   }
 
+  String? extractYouTubeVideoId(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return null;
+
+    // Handles https://www.youtube.com/watch?v=VIDEOID
+    if (uri.queryParameters.containsKey('v')) {
+      return uri.queryParameters['v'];
+    }
+
+    // Handles youtu.be/VIDEOID or youtube.com/embed/VIDEOID
+    final regExp = RegExp(
+      r"(?:v=|\/)([0-9A-Za-z_-]{11}).*",
+      caseSensitive: false,
+      multiLine: false,
+    );
+
+    final match = regExp.firstMatch(url);
+    return match?.group(1);
+  }
+  Widget videoPlayer(String uri){
+    final id =extractYouTubeVideoId(uri);
+
+    final _controller = YoutubePlayerController.fromVideoId(
+      videoId: id!,
+      autoPlay: false,
+      params: const YoutubePlayerParams(showFullscreenButton: true),
+    );
+
+    return SizedBox(
+      height: 64,
+      width: 64,
+      child: YoutubePlayer(
+        controller: _controller,
+        aspectRatio:1,
+      ),
+    );
+
+
+  }
 
 
 String removeAllHtmlTags(String htmlText) {
@@ -76,17 +128,17 @@ String removeAllHtmlTags(String htmlText) {
 
   final TextStyle _dateTextStyle = TextStyle(
     // No fontFamily specified - will use default
-    color: Colors.grey.shade500,
-    fontSize: 12,
+    color: Color.fromRGBO(0, 0, 0, 70),
+    fontSize: 15,
     fontWeight: FontWeight.w400,
   );
 
   final TextStyle _eventTitleStyle = const TextStyle(
     fontFamily: 'Movatif',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
     color: Colors.black,
-    height: 1.3,
+    // height: 1.3,
   );
 
   final TextStyle _noEventsTextStyle = const TextStyle(
@@ -99,7 +151,7 @@ String removeAllHtmlTags(String htmlText) {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               // Search Bar
@@ -157,6 +209,7 @@ String removeAllHtmlTags(String htmlText) {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _events.length,
+
                   itemBuilder: (context, index) {
                     final event = _events[index];
                     final dateStr = DateFormat(
@@ -175,6 +228,7 @@ String removeAllHtmlTags(String htmlText) {
                           bannerImage: imageUrl,
                           postDate: dateStr,
                           description: removeAllHtmlTags(event.description),
+                          moreDescription: event.moreDescriptions,
                         );
                         Navigator.push(
                           context,
@@ -183,38 +237,64 @@ String removeAllHtmlTags(String htmlText) {
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
+                      child: Container(
+                        // margin: EdgeInsets.only(bottom: 20),
+                        padding: EdgeInsets.only(top: 20,bottom: 16),
+                        height: 136,
+                        decoration: BoxDecoration(
+                          border: index==0?null:BoxBorder.fromLTRB(top: BorderSide(color: Color(0x1a000000)))
+                        ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                imageUrl,
-                                width: 64,
-                                height: 64,
+                              borderRadius: BorderRadius.circular(18),
+                              child: event.bannerImage==""?Image.network(
+                                'https://img.youtube.com/vi/${extractYouTubeVideoId(event.bannerVideo)}/hqdefault.jpg'                                ,
+                                width: 104,
+                                height: 104,
                                 fit: BoxFit.cover,
                                 errorBuilder:
                                     (_, __, ___) => Container(
-                                      width: 64,
-                                      height: 64,
+
+                                  width: 104,
+                                  height: 104,
+                                  color: Colors.grey[300],
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    size: 24,
+                                  ),
+                                ),
+                              ):
+                              // Text(imageUrl)
+                              Image.network(
+                                imageUrl,
+                                width: 104,
+                                height: 104,
+                                fit: BoxFit.cover,
+                                errorBuilder:
+                                    (_, __, ___) => Container(
+                                      width: 104,
+                                      height:104,
                                       color: Colors.grey[300],
                                       child: const Icon(
                                         Icons.broken_image,
                                         size: 24,
                                       ),
                                     ),
-                              ),
+                              )
+                              // videoPlayer(event.bannerVideo)
+                              ,
                             ),
                             const SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(dateStr, style: _dateTextStyle),
-                                  const SizedBox(height: 4),
-                                  Text(event.title, style: _eventTitleStyle),
+                                  const SizedBox(height: 9),
+                                  Text(event.title.length>100?event.title.substring(0,75)+"...":event.title, style: _eventTitleStyle),
                                 ],
                               ),
                             ),

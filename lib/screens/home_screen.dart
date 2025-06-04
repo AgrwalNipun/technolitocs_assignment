@@ -12,6 +12,9 @@ import 'package:assihnment_technolitocs/utils/ui_colors.dart';
 import 'package:assihnment_technolitocs/screens/explore_page/directory_screen.dart';
 import '../utils/home/home_side_menu.dart';
 
+final _controller = ScrollController();
+
+
 class HomeScreenModel {
   final List<String> imageUrls;
   HomeScreenModel({required this.imageUrls});
@@ -35,8 +38,16 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+
+
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenModel? _homeScreenModel;
+
+
+  String removeAllHtmlTags(String htmlText) {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
+    return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+  }
 
   final PageController _pageController = PageController(viewportFraction: 0.9);
   int _currentIndex = 0;
@@ -44,12 +55,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _previousTabIndex = 0;
   Timer? _autoScrollTimer;
   bool _showAppBar = true;
+  late var data;
 
+  Object? fetchMemberDetails(){
+
+
+  }
   @override
   void initState() {
     super.initState();
     _loadHomeScreenData();
     _startAutoScroll();
+    data = fetchMemberDetails();
   }
 
   Future<void> _loadHomeScreenData() async {
@@ -105,55 +122,27 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+
   Widget _buildHomeContent() {
     final Gradient textGradient = const LinearGradient(
       colors: [Color(0xFF30D6EF), Color(0xFF6A81EB), Color(0xFF794CEC)],
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 12),
-        _buildImageScroller(),
-        const SizedBox(height: 16),
-        const AllFeatureSection(),
-        const SizedBox(height: 12),
-        const ExploreSection(),
-        const SizedBox(height: 12),
-        const RecentUpdatesSection(),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.only(left: 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Rest of Life',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                  fontFamily: 'Movatif',
-                ),
-              ),
-              Text(
-                'Best of Life',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Movatif',
-                  foreground:
-                      Paint()
-                        ..shader = textGradient.createShader(
-                          const Rect.fromLTWH(0, 0, 150, 30),
-                        ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 40),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+      
+        children: [
+          const SizedBox(height: 12),
+          _buildImageScroller(),
+          const SizedBox(height: 16),
+          const AllFeatureSection(),
+          const SizedBox(height: 12),
+          const ExploreSection(),
+          const SizedBox(height: 12),
+          const RecentUpdatesSection(),
+        ],
+      ),
     );
   }
 
@@ -169,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         SizedBox(
-          height: 360,
+          height: 412,
           child: PageView.builder(
             controller: _pageController,
             itemCount: imagePaths.length,
@@ -243,9 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness: Brightness.dark,
+
+      value: SystemUiOverlayStyle(
+        // statusBarColor:_selectedTabIndex!=3? Colors.green:Colors.green,
+        statusBarIconBrightness:Brightness.dark,
         statusBarBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -253,10 +243,12 @@ class _HomeScreenState extends State<HomeScreen> {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: _buildBottomNavBar(context),
         drawer: const SideMenuWidget(),
+        extendBodyBehindAppBar: true,
+        appBar:   _showAppBar? _buildCustomAppBar(context):null,
         body: SafeArea(
           child: Column(
             children: [
-              if (_showAppBar) _buildTopContainer(context),
+
               Expanded(
                 child: AnimatedSwitcher(
                   duration: const Duration(milliseconds: 350),
@@ -359,7 +351,75 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
+  PreferredSizeWidget _buildCustomAppBar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(100), // Adjust height as needed
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 110),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+          margin: const EdgeInsets.only(top:30),
+          decoration: BoxDecoration(
+            color:Colors.transparent,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Builder(
+                builder: (context) => IconButton(
+                  icon: const Icon(
+                    Icons.menu_rounded,
+                    size: 28,
+                    color: Colors.black,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        'Hi There!',
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Rahul Dodeja',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontFamily: 'Movatif',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 8),
+                  ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    child: Image.asset(
+                      'assets/images/person.jpg',
+                      width: 48,
+                      height: 48,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   Widget _buildBottomNavBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 15),
