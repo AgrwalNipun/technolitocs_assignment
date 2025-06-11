@@ -1,12 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../../../config/model/blog_details_model.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class BlogDetails extends StatefulWidget {
   final BlogData blogData;
+  final _controller = YoutubePlayerController(
+    params: YoutubePlayerParams(
+      mute: false,
+      showControls: true,
+      showFullscreenButton: true,
+    ),
+  );
 
-  const BlogDetails({Key? key, required this.blogData}) : super(key: key);
+  BlogDetails({Key? key, required this.blogData}) : super(key: key);
+
+  String removeAllHtmlTags(String htmlText) {
+    if (htmlText.isEmpty) return htmlText;
+
+    final RegExp exp = RegExp(
+      r"<[^>]*>",
+      multiLine: true,
+      caseSensitive: false,
+    );
+
+    return htmlText
+        .replaceAll(exp, '')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', "'")
+        .trim();
+  }
 
   @override
   State<BlogDetails> createState() => _BlogDetailsState();
@@ -14,8 +42,11 @@ class BlogDetails extends StatefulWidget {
 
 class _BlogDetailsState extends State<BlogDetails> {
 
+    late var screenWidth = MediaQuery.of(context).size.width;
+
 late var _controller;
 final String linkImg = "https://technolitics-s3-bucket.s3.ap-south-1.amazonaws.com/rolbol-s3-bucket/";
+late var blogData;
 @override
 void initState() {
   super.initState();
@@ -24,9 +55,9 @@ params: YoutubePlayerParams(
   mute: false,
   showControls: true,
   showFullscreenButton: true,
-
 ),
 );
+blogData = widget.blogData;
 }
 
 String? extractYouTubeVideoId(String url) {
@@ -71,46 +102,54 @@ String removeAllHtmlTags(String htmlText) {
 
 @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final double padding = screenWidth * 0.05;
-    final double fontSize = screenWidth < 360 ? 12 : 14;
+    final screenSize = MediaQuery.of(context).size;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    final double padding = screenSize.width * 0.05;
 
-    // Define text styles
+    // Responsive font sizing
+    final double fontSize = screenSize.width < 360 ? 12 : 14;
+    final double imageHeight =
+        isPortrait ? screenSize.width * 0.6 : screenSize.height * 0.4;
+    
+    // Text styles
     final TextStyle titleStyle = TextStyle(
       fontFamily: 'Movatif',
       fontWeight: FontWeight.bold,
       fontSize: fontSize * 1.4,
+      color: Colors.black,
+      height: 1.3,
     );
 
     final TextStyle descriptionStyle = TextStyle(
       fontFamily: 'Movatif',
       fontSize: fontSize,
-      height: 1.4,
+      height: 1.6,
+      color: Colors.black87,
     );
 
     final TextStyle dateStyle = TextStyle(
-      // No fontFamily specified - will use default
       fontSize: fontSize * 0.8,
       fontWeight: FontWeight.w500,
-      color: Colors.grey,
+      color: Colors.grey.shade600,
     );
+
+    final cleanedDescription = removeAllHtmlTags(blogData.description);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.dark,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
-            icon: Image.asset(
-              'assets/images/backward_arrow_black.png',
-              width: 24,
-              height: 24,
-            ),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () => Navigator.of(context).pop(),
           ),
+          centerTitle: false,
+          titleSpacing: 0,
         ),
-        backgroundColor: Colors.white,
         body: SingleChildScrollView(
 
           // padding: EdgeInsets.all(padding),

@@ -14,26 +14,21 @@ class RecentUpdatesSection extends StatefulWidget {
 }
 
 class _RecentUpdatesSectionState extends State<RecentUpdatesSection> {
-  Future<Map<String,dynamic>> getRecentUpdates() async{
-
+  Future<Map<String, dynamic>> getRecentUpdates() async {
     final url = "https://api-iiacgv2.technolitics.com/api/v1/home/homeTimeline";
     final res = await http.get(Uri.parse(url));
     final data = jsonDecode(res.body);
     return data;
-
   }
 
   final Gradient textGradient = const LinearGradient(
-    // colors: [Color(0xFF30D6EF), Color(0xFF6A81EB), Color(0xFF794CEC)],
-    colors:[Color(0xff6D78EB),Color(0xff53D5E8),Color(0xff6A81EB),Color(0xff794CEC)],
-    stops: [0,0.16,0.655,1.00],
-
-    //background: linear-gradient(90deg, #6D78EB 0%, #53D5E8 16%, #6A81EB 65.5%, #794CEC 100%);
+    colors: [Color(0xFF30D6EF), Color(0xFF6A81EB), Color(0xFF794CEC)],
   );
 
   String removeAllHtmlTags(String htmlText) {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
     return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+   
   }
 
   late var _future;
@@ -197,6 +192,7 @@ class _RecentUpdatesSectionState extends State<RecentUpdatesSection> {
               ],
             ),
           ),
+          const SizedBox(height: 40),
         ],
       ),
     );

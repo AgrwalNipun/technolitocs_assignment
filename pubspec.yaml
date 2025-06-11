@@ -19,10 +19,14 @@ dependencies:
   cached_network_image:
   flutter_svg: ^2.1.0
   flutter_riverpod:
+<<<<<<< HEAD
   youtube_player_flutter: ^9.1.1
   youtube_player_iframe: ^5.2.1
   webview_flutter: ^4.13.0
   dotted_border: ^3.0.1
+=======
+  youtube_player_iframe:
+>>>>>>> c7fb92317336e7c0fc18d9674cf424a4f8cd0c20
 
 dev_dependencies:
   flutter_test:

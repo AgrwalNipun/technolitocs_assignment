@@ -54,7 +54,10 @@ class UpdateCardWidget extends StatelessWidget {
                 children: [
                   Container(
                     height: 36,
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xffE8E8E8),
                       borderRadius: BorderRadius.circular(8),

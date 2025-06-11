@@ -854,7 +854,11 @@ packages:
     source: hosted
     version: "1.1.1"
   webview_flutter:
+<<<<<<< HEAD
     dependency: "direct main"
+=======
+    dependency: transitive
+>>>>>>> c7fb92317336e7c0fc18d9674cf424a4f8cd0c20
     description:
       name: webview_flutter
       sha256: c3e4fe614b1c814950ad07186007eff2f2e5dd2935eba7b9a9a1af8e5885f1ba
@@ -901,6 +905,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.5.0"
+<<<<<<< HEAD
   youtube_player_flutter:
     dependency: "direct main"
     description:
@@ -909,6 +914,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.1.1"
+=======
+>>>>>>> c7fb92317336e7c0fc18d9674cf424a4f8cd0c20
   youtube_player_iframe:
     dependency: "direct main"
     description:

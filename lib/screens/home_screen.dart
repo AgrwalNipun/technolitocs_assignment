@@ -15,6 +15,7 @@ import '../utils/home/home_side_menu.dart';
 final _controller = ScrollController();
 
 
+
 class HomeScreenModel {
   final List<String> imageUrls;
   HomeScreenModel({required this.imageUrls});
@@ -43,10 +44,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenModel? _homeScreenModel;
 
-
   String removeAllHtmlTags(String htmlText) {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: false);
-    return htmlText.replaceAll(exp, '').replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
+    return htmlText
+        .replaceAll(exp, '')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&');
   }
 
   final PageController _pageController = PageController(viewportFraction: 0.9);
